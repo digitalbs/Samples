@@ -25,20 +25,22 @@ if (!(window.console && console.log)) {
 		    }, options);
 			return this.each(function(){
 				var $this = this;
-				$(window).bind('load.quizSelector', methods.build($this));
+				$(window).bind('load.quizSelector', methods.build($this, settings.start));
 				$('article input[type="radio"]', $this).click(function(){
 					methods.markAnswer($this, this);
 				});					
 				
 			});		
 		},
-		build: function($this)
+		build: function($this, start)
 		{
 			var qWidth = $('article', $this).width();
 			qLength = $('article', $this).length;
 			
 			$('.questions_answer', $this).width(Math.floor(qWidth * qLength));
 			$('.questions_answer article:first', $this).addClass('current');
+			var questionCounter = '<p class="questionCounter"><span>' + start + '</span> of ' + (qLength - 1) + '</p>'
+			$($this).append(questionCounter);
 			$('.questions_answer article').not('.current').hide(); //hide all articles
 			
 		},
@@ -66,12 +68,15 @@ if (!(window.console && console.log)) {
 		},
 		showQuestion: function($this, that)
 		{
+			var qCount = parseInt($('.questionCounter span', $this).text());
+			$('.questionCounter span', $this).text(qCount + 1);
 			$(that).next().show('blind', 500, function(){
 				$(this).addClass('current');	
 			});
 		}, 
 		showAnswers: function($this, that)
 		{
+			$('.questionCounter', $this).fadeOut();
 			$(that).next().show('explode', 300, function(){
 				$(this).addClass('current');
 				var data = $('form', $this).serialize();

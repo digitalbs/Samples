@@ -46,3 +46,11 @@ article.current
 	display:block;
 }
 
+.questionCounter
+{
+	position:absolute;
+	z-index:1;
+	bottom:0px;
+	right:10px;
+}
+
